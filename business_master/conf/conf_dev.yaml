@@ -1,0 +1,28 @@
+path:
+  log_path: "\\logs\\InputLogs\\"
+mysql:
+  user: root
+  password: root
+  host: 127.0.0.1
+  port: 3306
+  name: business
+redis:
+  user:
+  password:
+  host: 127.0.0.1
+  port: 6379
+  db_num: 0
+mongodb:
+  user:
+  password:
+  host: 127.0.0.1
+  port: 27017
+  db_name: demo
+  max_pool_size: 20
+elastic_search:
+    user:
+    password:
+    host: "http://127.0.0.1:9200"
+rocket_mq:
+    name_server:
+
