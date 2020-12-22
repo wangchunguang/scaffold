@@ -38,7 +38,7 @@ require (
 	github.com/tidwall/gjson v1.6.3 // indirect
 	github.com/tidwall/match v1.0.2 // indirect
 	github.com/x-cray/logrus-prefixed-formatter v0.5.2
-	go.etcd.io/etcd v3.3.25+incompatible // indirect
+	go.etcd.io/etcd v3.3.25+incompatible
 	go.mongodb.org/mongo-driver v1.4.1
 	go.uber.org/atomic v1.7.0 // indirect
 	go.uber.org/zap v1.16.0 // indirect
@@ -53,3 +53,4 @@ require (
 	google.golang.org/protobuf v1.25.0 // indirect
 	gopkg.in/yaml.v2 v2.3.0
 )
+replace google.golang.org/grpc => google.golang.org/grpc v1.26.0
