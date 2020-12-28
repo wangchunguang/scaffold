@@ -9,7 +9,7 @@ import (
 
 var engine *xorm.Engine
 
-func MysqlInit(yamlConfig *config.YamlDev) error {
+func MysqlInit(yamlConfig *config.YamlConfig) error {
 	engine, err := xorm.NewEngine("mysql", yamlConfig.Mysql.User+":"+yamlConfig.Mysql.Password+"@("+
 		yamlConfig.Mysql.Host+":"+yamlConfig.Mysql.Port+")/"+yamlConfig.Mysql.Name+"?charset=utf8")
 	if err != nil {

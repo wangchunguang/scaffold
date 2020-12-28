@@ -1,0 +1,39 @@
+// 版本声明
+syntax = "proto3";
+
+// 包名
+package lightweight;
+// 创建服务
+service UserService{
+  rpc SendMail(MailRequest) returns(MailResponse){
+  }
+  rpc getUserInfo(User)returns(MailReply){
+  }
+}
+
+// 新增邮件
+message User{
+  int64  id = 1; //id
+  string name = 2; // 用户名
+  int64  age = 3; // 年龄
+  string phone = 4; // 电话
+  string sex = 5; // 性别
+  string addr = 6; // 地址
+
+}
+// 请求消息
+message MailRequest {
+  string Mail = 1;// 邮箱
+  string Text = 2; // 发送内容
+}
+
+// 响应消息
+message MailResponse {
+  bool Ok = 1;
+}
+
+//结果
+message MailReply {
+  int32 code = 1; // 状态码
+  string msg = 2; // 消息
+}

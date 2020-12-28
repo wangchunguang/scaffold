@@ -4,9 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/coreos/etcd/clientv3"
 	"github.com/coreos/etcd/mvcc/mvccpb"
 	log "github.com/sirupsen/logrus"
-	"go.etcd.io/etcd/clientv3"
 	"google.golang.org/grpc/resolver"
 )
 
@@ -20,9 +20,9 @@ type Resolver struct {
 	cc        resolver.ClientConn
 }
 
-/*func NewResolver(endpoints []string, service string) resolver.Builder  {
+func NewResolver(endpoints []string, service string) resolver.Builder {
 	return &Resolver{endpoints: endpoints, service: service}
-}*/
+}
 
 // 返回etcd模式
 func (r *Resolver) Scheme() string {
@@ -30,7 +30,7 @@ func (r *Resolver) Scheme() string {
 	return schema + "_" + r.service
 }
 
-func (r *Resolver) ResolveNow(rn resolver.ResolveNowOption) {
+func (r *Resolver) ResolveNow(rn resolver.ResolveNowOptions) {
 }
 
 // Close
@@ -38,7 +38,7 @@ func (r *Resolver) Close() {
 }
 
 //  实现grpc.resolve.Builder接口的方法
-func (r *Resolver) Build(target resolver.Target, cc resolver.ClientConn, ops resolver.BuildOption) (resolver.Resolver, error) {
+func (r *Resolver) Build(target resolver.Target, cc resolver.ClientConn, ops resolver.BuildOptions) (resolver.Resolver, error) {
 	var err error
 	r.cli, err = clientv3.New(clientv3.Config{
 		Endpoints: r.endpoints,
@@ -60,13 +60,14 @@ func (r *Resolver) watch(prefix string) {
 		for _, v := range addrDict {
 			addrList = append(addrList, v)
 		}
-		r.cc.NewAddress(addrList)
+		r.cc.UpdateState(resolver.State{Addresses: addrList})
 	}
+	// clientv3.WithPrefix() 表示匹配key的前缀
 	resp, err := r.cli.Get(context.Background(), prefix, clientv3.WithPrefix())
 	if err == nil {
 		for i, kv := range resp.Kvs {
 			info := &ServiceInfo{}
-			err := json.Unmarshal([]byte(kv.Value), info)
+			err := json.Unmarshal(kv.Value, info)
 			if err != nil {
 				log.Error("r.cli.Get error ")
 			}
@@ -74,13 +75,14 @@ func (r *Resolver) watch(prefix string) {
 		}
 	}
 	update()
+	// 获取clientv3.WithPrevKV() 上一个键值对
 	watch := r.cli.Watch(context.Background(), prefix, clientv3.WithPrefix(), clientv3.WithPrevKV())
 	for n := range watch {
 		for _, ev := range n.Events {
 			switch ev.Type {
 			case mvccpb.PUT:
 				info := &ServiceInfo{}
-				err := json.Unmarshal([]byte(ev.Kv.Value), info)
+				err := json.Unmarshal(ev.Kv.Value, info)
 				if err != nil {
 					log.Error(err)
 				} else {

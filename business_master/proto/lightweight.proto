@@ -2,13 +2,12 @@ syntax = "proto3";
 //命名空间
 package lightweight;
 
-//健身房
+//健身房服务
 service Gym {
   rpc BodyBuilding (Person) returns (Reply) {
-
   }
 }
-//谁在健身
+//请求
 message Person {
   string name = 1;
   repeated string actions = 2;

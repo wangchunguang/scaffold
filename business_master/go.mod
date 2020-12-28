@@ -4,7 +4,7 @@ go 1.15
 
 require (
 	github.com/apache/rocketmq-client-go/v2 v2.0.0
-	github.com/coreos/etcd v3.3.25+incompatible // indirect
+	github.com/coreos/etcd v3.3.25+incompatible
 	github.com/coreos/go-semver v0.3.0 // indirect
 	github.com/coreos/pkg v0.0.0-20180928190104-399ea9e2e55f // indirect
 	github.com/fastly/go-utils v0.0.0-20180712184237-d95a45783239 // indirect
@@ -53,4 +53,5 @@ require (
 	google.golang.org/protobuf v1.25.0 // indirect
 	gopkg.in/yaml.v2 v2.3.0
 )
+
 replace google.golang.org/grpc => google.golang.org/grpc v1.26.0
