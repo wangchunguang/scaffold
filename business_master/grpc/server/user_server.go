@@ -52,7 +52,7 @@ func Server_user(listen net.Listener) {
 	// 该goroutine读取gRPC请求，然后调用已注册的处理程序来响应它们。
 	//	etcd服务注册
 	reg, err := etcd.NewService(etcd.ServiceInfo{
-		Name: "user",
+		Name: "user_etcd",
 		IP:   "127.0.0.1:8972", // grpc节点
 	}, []string{"127.0.0.1:2379"})
 	if err != nil {

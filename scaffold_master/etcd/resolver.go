@@ -12,6 +12,12 @@ import (
 
 const schema = "etcd"
 
+// 服务信息
+type ServiceInfo struct {
+	Name string // etcd名称
+	IP   string // etcd ip
+}
+
 // 实现grpc的grpc.resolve.Builder接口的Build与Scheme方法
 type Resolver struct {
 	endpoints []string

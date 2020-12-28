@@ -2,9 +2,10 @@ package client
 
 import (
 	"context"
-	log "github.com/sirupsen/logrus"
+	"github.com/prometheus/common/log"
 	"google.golang.org/grpc"
 	lightweight "master/scaffold_master/pb"
+
 	"os"
 
 	"time"

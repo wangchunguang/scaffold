@@ -1,8 +1,9 @@
 package main
 
 import (
-	log "github.com/sirupsen/logrus"
+	"github.com/prometheus/common/log"
 	"google.golang.org/grpc"
+	"master/scaffold_master/grpc/client"
 	"os"
 	"os/signal"
 )
