@@ -58,7 +58,7 @@ func (service *Service) Start() (err error) {
 				log.Info("keep alive channel closed")
 				return service.revoke()
 			}
-			log.Info("recv reply from service key=", service.getKey(), "ttl =", resp.TTL)
+			println("recv reply from service key=", service.getKey(), "ttl =", resp.TTL)
 		}
 	}
 	return

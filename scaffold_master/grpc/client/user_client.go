@@ -11,15 +11,21 @@ import (
 	"time"
 )
 
-func client_user() {
+const (
+	ip        = "127.0.0.1:2379"
+	name      = "user_etcd"
+	grpc_port = "localhost:8972"
+)
+
+func Client_user() {
 	newResolver := etcd.NewResolver([]string{
-		"127.0.0.1:2379",
-	}, "user_etcd")
+		ip,
+	}, name)
 	resolver.Register(newResolver)
-
-	ctx, _ := context.WithTimeout(context.Background(), 3*time.Second)
-	addr := fmt.Sprintf("%s:///%s", newResolver.Scheme(), "g.srv.mail" /*user_etcd经测试，这个可以随便写，底层只是取scheme对应的Build对象*/)
-
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	// user_etcd经测试，这个可以随便写，底层只是取scheme对应的Build对象
+	addr := fmt.Sprintf("%s:///%s", newResolver.Scheme(), name)
+	log.Info("etcd addr ", addr)
 	dialContext, err := grpc.DialContext(ctx, addr, grpc.WithInsecure(),
 		//指定初始化round_robin => balancer (后续可以自行定制balancer和 register、resolver 同样的方式)
 		grpc.WithDefaultServiceConfig(`{"loadBalancingConfig": [{"round_robin":{}}]}`),
@@ -33,7 +39,6 @@ func client_user() {
 		log.Error("grpc dial err:", err)
 		return
 	}
-
 	/*conn, err := grpc.Dial(
 	        fmt.Sprintf("%s://%s/%s", "consul", GetConsulHost(), s.Name),
 	        //不能block => blockkingPicker打开，在调用轮询时picker_wrapper => picker时若block则不进行robin操作直接返回失败
@@ -46,7 +51,6 @@ func client_user() {
 		if err != nil {
 		panic(err)
 	}
-
 	*/
 	send_main(lightweight.NewUserServiceClient(dialContext))
 	set_user(lightweight.NewUserServiceClient(dialContext))
@@ -56,7 +60,7 @@ func client_user() {
 func send_main(cc lightweight.UserServiceClient) {
 	mail, err := cc.SendMail(context.TODO(), &lightweight.MailRequest{
 		Mail: "qq@mail.com",
-		Text: "test,test",
+		Text: "第一次发送邮件",
 	})
 
 	if err != nil {
@@ -82,5 +86,6 @@ func set_user(cc lightweight.UserServiceClient) {
 		log.Error("grpc set user err=", err)
 		return
 	}
-	log.Info(info)
+	log.Info(info.Msg)
+	log.Info(info.Code)
 }

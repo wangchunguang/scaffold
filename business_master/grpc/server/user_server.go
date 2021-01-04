@@ -12,6 +12,12 @@ import (
 	"net"
 )
 
+const (
+	etcd_ip = "127.0.0.1:2379"
+	ip      = "127.0.0.1:8972"
+	name    = "user_etcd"
+)
+
 type service struct {
 	lightweight.UnimplementedUserServiceServer
 }
@@ -19,26 +25,31 @@ type service struct {
 // 新增邮件
 func (s *service) SendMail(ctx context.Context, req *lightweight.MailRequest) (res *lightweight.MailResponse, err error) {
 	if len(req.Mail) > 0 && len(req.Text) > 0 {
-		fmt.Printf("邮箱:%s;发送内容:%s", req.Mail, req.Text)
-		res.Ok = true
-		return res, nil
+		fmt.Println("邮箱：", req.Mail, " 发送内容：", req.Text)
+		return &lightweight.MailResponse{
+			Ok: true,
+		}, nil
 	}
-	res.Ok = false
-	log.Error("No mailbox data is obtained")
-	return res, errors.New("No mailbox data is obtained")
+	return &lightweight.MailResponse{
+		Ok: false,
+	}, errors.New("No mailbox data is obtained")
+
 }
 
 //  获取用户信息
 func (s *service) GetUserInfo(ctx context.Context, req *lightweight.User) (res *lightweight.MailReply, err error) {
 	if req.Id < 0 {
-		res.Code = 400
-		res.Msg = "用户id不合法"
-		return res, errors.New("Invalid user id")
+		return &lightweight.MailReply{
+			Code: 400,
+			Msg:  "用户id不合法",
+		}, errors.New("Invalid user id")
 	}
 	// 获取用户信息
-	fmt.Println(req)
-	res.Code = 200
-	return res, nil
+	fmt.Println("id:", req.Id, " name:", req.Name, " age:", req.Age, " phone:", req.Phone, " sex:", req.Sex, " addr:", req.Addr)
+	return &lightweight.MailReply{
+		Code: 200,
+		Msg:  "操作成功",
+	}, nil
 }
 
 func Server_user(listen net.Listener) {
@@ -52,9 +63,9 @@ func Server_user(listen net.Listener) {
 	// 该goroutine读取gRPC请求，然后调用已注册的处理程序来响应它们。
 	//	etcd服务注册
 	reg, err := etcd.NewService(etcd.ServiceInfo{
-		Name: "user_etcd",
-		IP:   "127.0.0.1:8972", // grpc节点
-	}, []string{"127.0.0.1:2379"})
+		Name: name,
+		IP:   ip, // grpc节点
+	}, []string{etcd_ip})
 	if err != nil {
 		log.Error(err)
 	}
