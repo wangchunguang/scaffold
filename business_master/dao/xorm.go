@@ -2,7 +2,7 @@ package dao
 
 import (
 	"business_master/config"
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/func_go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
 	log "github.com/sirupsen/logrus"
 )

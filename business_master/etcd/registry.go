@@ -11,8 +11,8 @@ import (
 
 // 服务信息
 type ServiceInfo struct {
-	Name string // etcd名称
-	IP   string // etcd ip
+	Name string // grpc名称
+	IP   string // grpc节点
 }
 
 type Service struct {
@@ -52,13 +52,13 @@ func (service *Service) Start() (err error) {
 			return err
 		case <-service.client.Ctx().Done():
 			return errors.New("service closed")
-		case resp, ok := <-ch:
+		case _, ok := <-ch:
 			//	 监听租约
 			if !ok {
 				log.Info("keep alive channel closed")
 				return service.revoke()
 			}
-			println("recv reply from service key=", service.getKey(), "ttl =", resp.TTL)
+			//println("recv reply from service key=", service.getKey(),"id=",resp.ID)
 		}
 	}
 	return

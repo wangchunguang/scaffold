@@ -49,7 +49,7 @@ func (p *RocketMqClient) ConsumeSuccess(topic string) {
 	}
 	sy_once.Do(once_start)
 
-	//time.Sleep(time.Millisecond*10)
+	//func_time.Sleep(func_time.Millisecond*10)
 
 }
 

@@ -3,7 +3,6 @@ package main
 import (
 	"business_master/config"
 	"business_master/dao"
-	"business_master/logs"
 	"business_master/redis"
 	"flag"
 	"fmt"
@@ -20,8 +19,6 @@ func main() {
 	if err != nil {
 		return
 	}
-	// 开启日志
-	logs.InitLog(yamlConfig.Path.LogPath)
 	// 连接mysql
 	dao.MysqlInit(yamlConfig)
 	// 连接redis

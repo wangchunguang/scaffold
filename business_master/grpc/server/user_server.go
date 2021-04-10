@@ -61,7 +61,7 @@ func Server_user(listen net.Listener) {
 	reflection.Register(newServer)
 	// Serve方法在lis上接受传入连接，为每个连接创建一个ServerTransport和server的goroutine。
 	// 该goroutine读取gRPC请求，然后调用已注册的处理程序来响应它们。
-	//	etcd服务注册
+	//	etcd服务注册:
 	reg, err := etcd.NewService(etcd.ServiceInfo{
 		Name: name,
 		IP:   ip, // grpc节点
@@ -71,6 +71,6 @@ func Server_user(listen net.Listener) {
 	}
 	go reg.Start()
 	if err := newServer.Serve(listen); err != nil {
-		log.Println(err)
+		log.Error("server listen err:", err)
 	}
 }

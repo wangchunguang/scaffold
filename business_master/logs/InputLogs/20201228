@@ -1,3 +1,0 @@
-[2020-12-28.10:36:44]  INFO something ....
-[2020-12-28.10:36:44] ERROR mysql ping error --->dial tcp :0: connectex: The requested address is not valid in its context.
-[2020-12-28.10:36:44]  INFO redis  connection succeeded PONG

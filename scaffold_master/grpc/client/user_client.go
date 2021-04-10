@@ -17,12 +17,16 @@ const (
 	grpc_port = "localhost:8972"
 )
 
+/**
+grpc与etcd整合，是grpc先注册端口信息与key到etcd，然后etcd通过解析key获取grpc的端口，最后使grpc通信
+*/
 func Client_user() {
 	newResolver := etcd.NewResolver([]string{
 		ip,
 	}, name)
+	// 解析地址
 	resolver.Register(newResolver)
-	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
 	// user_etcd经测试，这个可以随便写，底层只是取scheme对应的Build对象
 	addr := fmt.Sprintf("%s:///%s", newResolver.Scheme(), name)
 	log.Info("etcd addr ", addr)

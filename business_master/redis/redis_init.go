@@ -16,6 +16,7 @@ func RedisInit(yamlConfig *config.YamlConfig) *redis.Client {
 		DB:           db,
 		MaxRetries:   5,
 		MinIdleConns: 5,
+		PoolSize:     5,
 	}).WithTimeout(5 * time.Second)
 	result, err := client.Ping().Result()
 	if err != nil {

@@ -2,10 +2,12 @@ package elasticSearch
 
 import (
 	"business_master/config"
+	"fmt"
 	"github.com/olivere/elastic/v7"
 	log "github.com/sirupsen/logrus"
 	"strconv"
 	"testing"
+	"time"
 )
 
 type Subject struct {
@@ -123,4 +125,23 @@ func TestElastic_EsDeleteByQuery(t *testing.T) {
 	query := elastic.NewBoolQuery().Must(d1, d2)
 	el.EsDeleteByQuery(hc, query)
 
+}
+
+func TestElasticSearchInit(t *testing.T) {
+	ch := make(chan int)
+
+	for {
+		select {
+		case <-ch:
+			fmt.Println("1111111")
+			return
+		case <-ch:
+			fmt.Println("2222222")
+			return
+		default:
+
+		}
+		fmt.Println("3333333333")
+		time.Sleep(time.Second)
+	}
 }
